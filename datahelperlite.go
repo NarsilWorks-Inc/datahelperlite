@@ -25,6 +25,17 @@ type DataHelperLite interface {
 	VerifyWithin(tablename string, values []std.ValidationExpression) (Valid bool, QueryOK bool, Message string)
 }
 
+// ReadType - read types in data retrieval
+type ReadType string
+
+// ReadTypes for data access
+const (
+	READALL     ReadType = `all`
+	READBYKEY   ReadType = `key`
+	READBYCODE  ReadType = `code`
+	READFORFORM ReadType = `form`
+)
+
 // Helper for datahelperlite
 var Helper map[string]DataHelperLite
 
