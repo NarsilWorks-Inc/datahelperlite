@@ -22,7 +22,7 @@ type DataHelperLite interface {
 	Query(sql string, args ...interface{}) (Rows, error)
 	QueryRow(sql string, args ...interface{}) Row
 	Exec(sql string, args ...interface{}) (int64, error)
-	VerifyWithin(tablename string, values []std.ValidationExpression) (Valid bool, QueryOK bool, Message string)
+	VerifyWithin(tablename string, values []std.VerifyExpression) (Valid bool, QueryOK bool, Message string)
 }
 
 // ReadType - read types in data retrieval
