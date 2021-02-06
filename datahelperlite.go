@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 	"regexp"
+	"strconv"
+	"strings"
 
 	cfg "github.com/eaglebush/config"
 	std "github.com/eaglebush/stdutil"
@@ -23,10 +25,14 @@ type DataHelperLite interface {
 	QueryRow(sql string, args ...interface{}) Row
 	Exec(sql string, args ...interface{}) (int64, error)
 	VerifyWithin(tablename string, values []std.VerifyExpression) (Valid bool, QueryOK bool, Message string)
+	Escape(fv string) string
 }
 
 // ReadType - read types in data retrieval
 type ReadType string
+
+// ReturnKind - kinds of return in data retrieval
+type ReturnKind string
 
 // ReadTypes for data access
 const (
@@ -34,6 +40,13 @@ const (
 	READBYKEY   ReadType = `key`
 	READBYCODE  ReadType = `code`
 	READFORFORM ReadType = `form`
+)
+
+// ReturnKind returns the data depends on kind
+const (
+	RETURNALL       ReturnKind = `all`
+	RETURNFORFORM   ReturnKind = `form`
+	RETURNESSENTIAL ReturnKind = `essential`
 )
 
 // Helper for datahelperlite
@@ -93,4 +106,33 @@ func InterpolateTable(sql string, schema string) string {
 	sql = re.ReplaceAllString(sql, schema+`$1`)
 
 	return sql
+}
+
+// ReplaceQueryParamMarker replaces SQL string with parameters set as ?
+func ReplaceQueryParamMarker(preparedQuery string, paramInSeq bool, paramPlaceHolder string) string {
+
+	var paramchar string
+
+	retstr := preparedQuery
+	defph := `?`
+	pattern := `\` + defph //search for ?
+
+	// if the paramPlaceHolder was set
+	// by the configuration the same as default place holder, we exit
+	if paramPlaceHolder == defph {
+		return retstr
+	}
+
+	re := regexp.MustCompile(pattern)
+	matches := re.FindAllString(preparedQuery, -1)
+
+	for i, match := range matches {
+		if paramInSeq {
+			retstr = strings.Replace(retstr, match, paramchar+strconv.Itoa((i+1)), 1)
+		} else {
+			retstr = strings.Replace(retstr, match, paramchar, 1) // replace one at a time
+		}
+	}
+
+	return retstr
 }
