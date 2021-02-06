@@ -13,19 +13,19 @@ import (
 
 // DataHelperLite interface for usage
 type DataHelperLite interface {
-	Open(ctx context.Context, di *cfg.DatabaseInfo) error
-	Close() error
-	Begin() error
-	Commit() error
-	Rollback() error
-	Mark(name string) error
-	Discard(name string) error
-	Save(name string) error
-	Query(sql string, args ...interface{}) (Rows, error)
-	QueryRow(sql string, args ...interface{}) Row
-	Exec(sql string, args ...interface{}) (int64, error)
-	VerifyWithin(tablename string, values []std.VerifyExpression) (Valid bool, QueryOK bool, Message string)
-	Escape(fv string) string
+	Open(ctx context.Context, di *cfg.DatabaseInfo) error                                                    // Open a new connection
+	Close() error                                                                                            // Close connection
+	Begin() error                                                                                            // Begin a transaction. If there is an existing transaction, begin is ignored
+	Commit() error                                                                                           // Commit a transaction
+	Rollback() error                                                                                         // Rollback a transaction
+	Mark(name string) error                                                                                  // Mark a savepoint
+	Discard(name string) error                                                                               // Discard a savepoint
+	Save(name string) error                                                                                  // Save a savepoint
+	Query(sql string, args ...interface{}) (Rows, error)                                                     // Query to a database and return one or more records
+	QueryRow(sql string, args ...interface{}) Row                                                            // QueryRow to a database and return one record
+	Exec(sql string, args ...interface{}) (int64, error)                                                     // Exec executes a non-returning query
+	VerifyWithin(tablename string, values []std.VerifyExpression) (Valid bool, QueryOK bool, Message string) // VerifyWithin a set of validation expression against the underlying database table
+	Escape(fv string) string                                                                                 // Escape a field value (fv) from disruption by single quote
 }
 
 // ReadType - read types in data retrieval
@@ -111,8 +111,6 @@ func InterpolateTable(sql string, schema string) string {
 // ReplaceQueryParamMarker replaces SQL string with parameters set as ?
 func ReplaceQueryParamMarker(preparedQuery string, paramInSeq bool, paramPlaceHolder string) string {
 
-	var paramchar string
-
 	retstr := preparedQuery
 	defph := `?`
 	pattern := `\` + defph //search for ?
@@ -128,9 +126,9 @@ func ReplaceQueryParamMarker(preparedQuery string, paramInSeq bool, paramPlaceHo
 
 	for i, match := range matches {
 		if paramInSeq {
-			retstr = strings.Replace(retstr, match, paramchar+strconv.Itoa((i+1)), 1)
+			retstr = strings.Replace(retstr, match, paramPlaceHolder+strconv.Itoa((i+1)), 1)
 		} else {
-			retstr = strings.Replace(retstr, match, paramchar, 1) // replace one at a time
+			retstr = strings.Replace(retstr, match, paramPlaceHolder, 1) // replace one at a time
 		}
 	}
 
