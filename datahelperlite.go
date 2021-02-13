@@ -36,10 +36,11 @@ type ReturnKind string
 
 // ReadTypes for data access
 const (
-	READALL     ReadType = `all`
-	READBYKEY   ReadType = `key`
-	READBYCODE  ReadType = `code`
-	READFORFORM ReadType = `form`
+	READALL              ReadType = `all`
+	READBYKEY            ReadType = `key`
+	READBYSUPPORTINGKEYS ReadType = `skeys`
+	READBYCODE           ReadType = `code`
+	READFORFORM          ReadType = `form`
 )
 
 // ReturnKind returns the data depends on kind
