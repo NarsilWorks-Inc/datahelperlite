@@ -60,8 +60,11 @@ func New(dhl *DataHelperLite, helperid string) (DataHelperLite, error) {
 		ndh     DataHelperLite
 		present bool
 	)
+
 	// copy existing postgresql helper
-	ndh = *dhl
+	if dhl != nil {
+		ndh = *dhl
+	}
 
 	if ndh == nil {
 		ndh, present = Helper[helperid]
