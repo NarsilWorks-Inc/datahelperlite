@@ -20,7 +20,7 @@ type DataHelperLite interface {
 	Escape(fv string) string                                                                                 // Escape a field value (fv) from disruption by single quote
 	Exec(sql string, args ...interface{}) (int64, error)                                                     // Exec executes a non-returning query
 	Mark(name string) error                                                                                  // Mark a savepoint
-	Next(serial string, next *interface{}) error                                                             // Get next value of a serial
+	Next(serial string, next int) error                                                                      // Get next value of a serial
 	Open(ctx context.Context, di *cfg.DatabaseInfo) error                                                    // Open a new connection
 	Query(sql string, args ...interface{}) (Rows, error)                                                     // Query to a database and return one or more records
 	QueryRow(sql string, args ...interface{}) Row                                                            // QueryRow to a database and return one record
