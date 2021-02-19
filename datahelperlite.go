@@ -13,19 +13,20 @@ import (
 
 // DataHelperLite interface for usage
 type DataHelperLite interface {
-	Open(ctx context.Context, di *cfg.DatabaseInfo) error                                                    // Open a new connection
-	Close() error                                                                                            // Close connection
 	Begin() error                                                                                            // Begin a transaction. If there is an existing transaction, begin is ignored
-	Commit() error                                                                                           // Commit a transaction
-	Rollback() error                                                                                         // Rollback a transaction
-	Mark(name string) error                                                                                  // Mark a savepoint
+	Commit() error                                                                                           // Commit the transaction
+	Close() error                                                                                            // Close connection
 	Discard(name string) error                                                                               // Discard a savepoint
-	Save(name string) error                                                                                  // Save a savepoint
+	Escape(fv string) string                                                                                 // Escape a field value (fv) from disruption by single quote
+	Exec(sql string, args ...interface{}) (int64, error)                                                     // Exec executes a non-returning query
+	Mark(name string) error                                                                                  // Mark a savepoint
+	Next(serial string, next *interface{}) error                                                             // Get next value of a serial
+	Open(ctx context.Context, di *cfg.DatabaseInfo) error                                                    // Open a new connection
 	Query(sql string, args ...interface{}) (Rows, error)                                                     // Query to a database and return one or more records
 	QueryRow(sql string, args ...interface{}) Row                                                            // QueryRow to a database and return one record
-	Exec(sql string, args ...interface{}) (int64, error)                                                     // Exec executes a non-returning query
+	Rollback() error                                                                                         // Rollback a transaction
+	Save(name string) error                                                                                  // Save a transaction
 	VerifyWithin(tablename string, values []std.VerifyExpression) (Valid bool, QueryOK bool, Message string) // VerifyWithin a set of validation expression against the underlying database table
-	Escape(fv string) string                                                                                 // Escape a field value (fv) from disruption by single quote
 }
 
 // ReadType - read types in data retrieval
