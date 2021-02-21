@@ -54,8 +54,13 @@ const (
 // Helper for datahelperlite
 var Helper map[string]DataHelperLite
 
-// ErrNoRows for no rows returned
-var ErrNoRows error
+// Errors
+var (
+	ErrNoRows        error // ErrNoRows for no rows returned
+	ErrNoConn        error = errors.New(`No connection of the object was initialized`)
+	ErrNoTx          error = errors.New(`No transaction was initialized`)
+	ErrVarMustBeInit error = errors.New(`Variable in next parameter must be initialized`)
+)
 
 // New creates new datahelper lite
 func New(dhl *DataHelperLite, helperid string) (DataHelperLite, error) {
