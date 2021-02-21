@@ -90,8 +90,8 @@ func SetHelper(name string, dhl DataHelperLite) {
 }
 
 // SetErrNoRows sets the error when there are no rows
-func SetErrNoRows(message string) {
-	ErrNoRows = errors.New(message)
+func SetErrNoRows(err error) {
+	ErrNoRows = err
 }
 
 // Row datahelperlite row interface
