@@ -54,6 +54,9 @@ const (
 // Helper for datahelperlite
 var Helper map[string]DataHelperLite
 
+// ErrNoRows for no rows returned
+var ErrNoRows error
+
 // New creates new datahelper lite
 func New(dhl *DataHelperLite, helperid string) (DataHelperLite, error) {
 
@@ -84,6 +87,11 @@ func SetHelper(name string, dhl DataHelperLite) {
 	}
 
 	Helper[name] = dhl
+}
+
+// SetErrNoRows sets the error when there are no rows
+func SetErrNoRows(message string) {
+	ErrNoRows = errors.New(message)
 }
 
 // Row datahelperlite row interface
