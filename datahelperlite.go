@@ -19,6 +19,7 @@ type DataHelperLite interface {
 	Discard(name string) error                                                                               // Discard a savepoint
 	Escape(fv string) string                                                                                 // Escape a field value (fv) from disruption by single quote
 	Exec(sql string, args ...interface{}) (int64, error)                                                     // Exec executes a non-returning query
+	Exists(sqlwparams string, args ...interface{}) (bool, error)                                             // Checks existence of a record
 	Mark(name string) error                                                                                  // Mark a savepoint
 	Next(serial string, next *int64) error                                                                   // Get next value of a serial
 	Open(ctx context.Context, di *cfg.DatabaseInfo) error                                                    // Open a new connection
