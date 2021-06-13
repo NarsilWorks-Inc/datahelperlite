@@ -23,7 +23,8 @@ type DataHelperLite interface {
 	Mark(name string) error                                                                                  // Mark a savepoint
 	Next(serial string, next *int64) error                                                                   // Get next value of a serial
 	Open(ctx context.Context, di *cfg.DatabaseInfo) error                                                    // Open a new connection
-	Query(sql string, args ...interface{}) (Rows, error)                                                     // Query to a database and return one or more records
+	Query(sql string, args ...interface{}) (Rows, error)                                                     // Query to a database to return one or more records
+	QueryArray(sql string, out interface{}, args ...interface{}) error                                       // Query to a database to return one or more records and store to an array
 	QueryRow(sql string, args ...interface{}) Row                                                            // QueryRow to a database and return one record
 	Rollback() error                                                                                         // Rollback a transaction
 	Save(name string) error                                                                                  // Save a transaction
@@ -57,10 +58,11 @@ var Helper map[string]DataHelperLite
 
 // Errors
 var (
-	ErrNoRows        error // ErrNoRows for no rows returned
-	ErrNoConn        error = errors.New(`No connection of the object was initialized`)
-	ErrNoTx          error = errors.New(`No transaction was initialized`)
-	ErrVarMustBeInit error = errors.New(`Variable in next parameter must be initialized`)
+	ErrNoRows                error // ErrNoRows for no rows returned
+	ErrNoConn                error = errors.New(`no connection of the object was initialized`)
+	ErrNoTx                  error = errors.New(`no transaction was initialized`)
+	ErrVarMustBeInit         error = errors.New(`variable in next parameter must be initialized`)
+	ErrArrayTypeNotSupported error = errors.New(`array type not supported`)
 )
 
 // New creates new datahelper lite
