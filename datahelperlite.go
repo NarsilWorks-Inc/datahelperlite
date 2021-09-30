@@ -29,6 +29,7 @@ type DataHelperLite interface {
 	Rollback() error                                                                                         // Rollback a transaction
 	Save(name string) error                                                                                  // Save a transaction
 	VerifyWithin(tablename string, values []std.VerifyExpression) (Valid bool, QueryOK bool, Message string) // VerifyWithin a set of validation expression against the underlying database table
+	DatabaseVersion() string                                                                                 // Get database version
 }
 
 // ReadType - read types in data retrieval
