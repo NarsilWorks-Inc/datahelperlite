@@ -13,6 +13,7 @@ import (
 
 // DataHelperLite interface for usage
 type DataHelperLite interface {
+	NewHelper() DataHelperLite
 	Begin() error                                                                                            // Begin a transaction. If there is an existing transaction, begin is ignored
 	Commit() error                                                                                           // Commit the transaction
 	Close() error                                                                                            // Close connection
