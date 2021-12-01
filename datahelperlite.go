@@ -71,8 +71,7 @@ var (
 func New(dhl *DataHelperLite, helperid string) (DataHelperLite, error) {
 
 	var (
-		ndh     DataHelperLite
-		present bool
+		ndh DataHelperLite
 	)
 
 	// copy existing postgresql helper
@@ -81,10 +80,13 @@ func New(dhl *DataHelperLite, helperid string) (DataHelperLite, error) {
 	}
 
 	if ndh == nil {
-		ndh, present = Helper[helperid]
+		ndhi, present := Helper[helperid]
 		if !present {
-			return nil, errors.New(`No helper name of such`)
+			return nil, errors.New(`no helper name of such`)
 		}
+
+		// create new helper instance
+		ndh = ndhi.NewHelper()
 	}
 
 	return ndh, nil
