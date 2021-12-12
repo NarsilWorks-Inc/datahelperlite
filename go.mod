@@ -1,4 +1,4 @@
-module datahelperlite
+module github.com/NarsilWorks-Inc/datahelperlite
 
 go 1.17
 
