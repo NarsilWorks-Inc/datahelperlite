@@ -6,6 +6,7 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
+	"time"
 
 	cfg "github.com/eaglebush/config"
 	std "github.com/eaglebush/stdutil"
@@ -31,6 +32,8 @@ type DataHelperLite interface {
 	Save(name string) error                                                                                  // Save a transaction
 	VerifyWithin(tablename string, values []std.VerifyExpression) (Valid bool, QueryOK bool, Message string) // VerifyWithin a set of validation expression against the underlying database table
 	DatabaseVersion() string                                                                                 // Get database version
+	Now() *time.Time                                                                                         // Get time now
+	NowUTC() *time.Time                                                                                      // Get the time in UTC
 }
 
 // ReadType - read types in data retrieval
