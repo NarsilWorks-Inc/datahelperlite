@@ -15,7 +15,8 @@ import (
 // DataHelperLite interface for usage
 type DataHelperLite interface {
 	NewHelper() DataHelperLite
-	Begin(tranid ...byte) error                                                                              // Begin a transaction. If there is an existing transaction, begin is ignored
+	Begin() error                                                                                            // Begin a transaction. If there is an existing transaction, begin is ignored
+	BeginDR() (string, error)                                                                                // Begin a transaction with transaction id to use when rollback is deferred
 	Commit(...string) error                                                                                  // Commit the transaction
 	Close() error                                                                                            // Close connection
 	Discard(name string) error                                                                               // Discard a savepoint
