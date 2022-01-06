@@ -8,7 +8,7 @@ type Rows interface {
 	Err() error
 	Next() bool
 	Scan(dest ...interface{}) error
-	Columns() []sql.ColumnType
+	Columns() ([]sql.ColumnType, error)
 	Values() ([]interface{}, error)
 	RawValues() [][]byte
 }
