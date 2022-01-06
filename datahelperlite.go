@@ -110,21 +110,6 @@ func SetErrNoRows(err error) {
 	ErrNoRows = err
 }
 
-// Row datahelperlite row interface
-type Row interface {
-	Scan(dest ...interface{}) error
-}
-
-// Rows datahelperlite rows interface
-type Rows interface {
-	Close()
-	Err() error
-	Next() bool
-	Scan(dest ...interface{}) error
-	Values() ([]interface{}, error)
-	RawValues() [][]byte
-}
-
 // InterpolateTable interpolates table name that has been enclosed with curly braces
 func InterpolateTable(sql string, schema string) string {
 	if schema != "" {
