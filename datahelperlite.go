@@ -59,6 +59,13 @@ const (
 	RETURNESSENTIAL ReturnKind = `essential`
 )
 
+// Parameter Types
+type (
+	VarChar     string
+	VarCharMax  string
+	NVarCharMax string
+)
+
 // Helper for datahelperlite
 var Helper map[string]DataHelperLite
 
