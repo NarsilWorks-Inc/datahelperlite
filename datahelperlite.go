@@ -3,6 +3,7 @@ package datahelperlite
 import (
 	"context"
 	"errors"
+	"reflect"
 	"regexp"
 	"strconv"
 	"strings"
@@ -65,6 +66,10 @@ type (
 	VarCharMax  string
 	NVarCharMax string
 )
+
+type ParameterType interface {
+	VarChar | VarCharMax | NVarCharMax
+}
 
 // Helper for datahelperlite
 var Helper map[string]DataHelperLite
@@ -154,4 +159,32 @@ func ReplaceQueryParamMarker(preparedQuery string, paramInSeq bool, paramPlaceHo
 	}
 
 	return retstr
+}
+
+// ToDBType converts string or string types to desired DBType
+func ToDBType[T ParameterType](value any) T {
+	if value == nil {
+		return GetZero[T]()
+	}
+
+	switch t := value.(type) {
+	case string:
+		return T(t)
+	case *string:
+		return T(*t)
+	default:
+		v := reflect.ValueOf(t)
+		if reflect.TypeOf(t).Kind() == reflect.Ptr {
+			v = v.Elem()
+		}
+
+		x := v.String()
+		return T(x)
+	}
+}
+
+// Get zero value of the generic type
+func GetZero[T any]() T {
+	var result T
+	return result
 }
