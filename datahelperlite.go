@@ -10,32 +10,31 @@ import (
 	"time"
 
 	cfg "github.com/eaglebush/config"
-	std "github.com/eaglebush/stdutil"
 )
 
 // DataHelperLite interface for usage
 type DataHelperLite interface {
 	NewHelper() DataHelperLite
-	Begin() error                                                                                            // Begin a transaction. If there is an existing transaction, begin is ignored
-	BeginDR() (string, error)                                                                                // Begin a transaction with transaction id to use when rollback is deferred
-	Commit(...string) error                                                                                  // Commit the transaction
-	Close() error                                                                                            // Close connection
-	Discard(name string) error                                                                               // Discard a savepoint
-	Escape(fv string) string                                                                                 // Escape a field value (fv) from disruption by single quote
-	Exec(sql string, args ...interface{}) (int64, error)                                                     // Exec executes a non-returning query
-	Exists(sqlwparams string, args ...interface{}) (bool, error)                                             // Checks existence of a record
-	Mark(name string) error                                                                                  // Mark a savepoint
-	Next(serial string, next *int64) error                                                                   // Get next value of a serial
-	Open(ctx context.Context, di *cfg.DatabaseInfo) error                                                    // Open a new connection
-	Query(sql string, args ...interface{}) (Rows, error)                                                     // Query to a database to return one or more records
-	QueryArray(sql string, out interface{}, args ...interface{}) error                                       // Query to a database to return one or more records and store to an array
-	QueryRow(sql string, args ...interface{}) Row                                                            // QueryRow to a database and return one record
-	Rollback(...string) error                                                                                // Rollback a transaction
-	Save(name string) error                                                                                  // Save a transaction
-	VerifyWithin(tablename string, values []std.VerifyExpression) (Valid bool, QueryOK bool, Message string) // VerifyWithin a set of validation expression against the underlying database table
-	DatabaseVersion() string                                                                                 // Get database version
-	Now() *time.Time                                                                                         // Get time now
-	NowUTC() *time.Time                                                                                      // Get the time in UTC
+	Begin() error                                                                       // Begin a transaction. If there is an existing transaction, begin is ignored
+	BeginDR() (string, error)                                                           // Begin a transaction with transaction id to use when rollback is deferred
+	Commit(...string) error                                                             // Commit the transaction
+	Close() error                                                                       // Close connection
+	Discard(name string) error                                                          // Discard a savepoint
+	Escape(fv string) string                                                            // Escape a field value (fv) from disruption by single quote
+	Exec(sql string, args ...interface{}) (int64, error)                                // Exec executes a non-returning query
+	Exists(sqlWithParams string, args ...interface{}) (bool, error)                     // Checks existence of a record
+	Mark(name string) error                                                             // Mark a savepoint
+	Next(serial string, next *int64) error                                              // Get next value of a serial
+	Open(ctx context.Context, di *cfg.DatabaseInfo) error                               // Open a new connection
+	Query(sql string, args ...interface{}) (Rows, error)                                // Query to a database to return one or more records
+	QueryArray(sql string, out interface{}, args ...interface{}) error                  // Query to a database to return one or more records and store to an array
+	QueryRow(sql string, args ...interface{}) Row                                       // QueryRow to a database and return one record
+	Rollback(...string) error                                                           // Rollback a transaction
+	Save(name string) error                                                             // Save a transaction
+	VerifyWithin(tableName string, values []VerifyExpression) (Valid bool, Error error) // VerifyWithin a set of validation expression against the underlying database table
+	DatabaseVersion() string                                                            // Get database version
+	Now() *time.Time                                                                    // Get time now
+	NowUTC() *time.Time                                                                 // Get the time in UTC
 }
 
 // ReadType - read types in data retrieval
