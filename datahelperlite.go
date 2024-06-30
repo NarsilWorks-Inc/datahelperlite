@@ -84,26 +84,21 @@ var (
 
 // New creates new datahelper lite
 func New(dhl *DataHelperLite, helperid string) (DataHelperLite, error) {
-
 	var (
 		ndh DataHelperLite
 	)
-
 	// copy existing postgresql helper
 	if dhl != nil {
 		ndh = *dhl
 	}
-
 	if ndh == nil {
 		ndhi, present := Helper[helperid]
 		if !present {
 			return nil, errors.New(`no helper name of such`)
 		}
-
 		// create new helper instance
 		ndh = ndhi.NewHelper()
 	}
-
 	return ndh, nil
 }
 
@@ -112,7 +107,6 @@ func SetHelper(name string, dhl DataHelperLite) {
 	if Helper == nil {
 		Helper = make(map[string]DataHelperLite)
 	}
-
 	Helper[name] = dhl
 }
 
@@ -126,10 +120,8 @@ func InterpolateTable(sql string, schema string) string {
 	if schema != "" {
 		schema = schema + `.`
 	}
-
 	re := regexp.MustCompile(`\{([a-zA-Z0-9\[\]\"\_\-]*)\}`)
 	sql = re.ReplaceAllString(sql, schema+`$1`)
-
 	return sql
 }
 
@@ -145,10 +137,8 @@ func ReplaceQueryParamMarker(preparedQuery string, paramInSeq bool, paramPlaceHo
 	if paramPlaceHolder == defph {
 		return retstr
 	}
-
 	re := regexp.MustCompile(pattern)
 	matches := re.FindAllString(preparedQuery, -1)
-
 	for i, match := range matches {
 		if paramInSeq {
 			retstr = strings.Replace(retstr, match, paramPlaceHolder+strconv.Itoa((i+1)), 1)
@@ -156,7 +146,6 @@ func ReplaceQueryParamMarker(preparedQuery string, paramInSeq bool, paramPlaceHo
 			retstr = strings.Replace(retstr, match, paramPlaceHolder, 1) // replace one at a time
 		}
 	}
-
 	return retstr
 }
 
@@ -165,7 +154,6 @@ func ToDBType[T ParameterType](value any) T {
 	if value == nil {
 		return GetZero[T]()
 	}
-
 	switch t := value.(type) {
 	case string:
 		return T(t)
@@ -176,7 +164,6 @@ func ToDBType[T ParameterType](value any) T {
 		if reflect.TypeOf(t).Kind() == reflect.Ptr {
 			v = v.Elem()
 		}
-
 		x := v.String()
 		return T(x)
 	}
