@@ -45,11 +45,12 @@ type ReturnKind string
 
 // ReadTypes for data access
 const (
-	READALL           ReadType = `all`
-	READBYKEY         ReadType = `key`
-	READBYLATERALKEYS ReadType = `lkeys`
-	READBYCODE        ReadType = `code`
-	READFORFORM       ReadType = `form`
+	READALL           ReadType = `all`   // Read all
+	READBYKEY         ReadType = `key`   // Read by key
+	READBYLATERALKEYS ReadType = `lkeys` // Read by lateral keys
+	READBYCODE        ReadType = `code`  // Read by code
+	READFORFORM       ReadType = `form`  // Read for form
+	READELSE          ReadType = `else`  // Read else
 )
 
 // ReturnKind returns the data depends on kind
@@ -83,7 +84,7 @@ var (
 )
 
 // New creates new datahelper lite
-func New(dhl *DataHelperLite, helperid string) (DataHelperLite, error) {
+func New(dhl *DataHelperLite, helperId string) (DataHelperLite, error) {
 	var (
 		ndh DataHelperLite
 	)
@@ -92,7 +93,7 @@ func New(dhl *DataHelperLite, helperid string) (DataHelperLite, error) {
 		ndh = *dhl
 	}
 	if ndh == nil {
-		ndhi, present := Helper[helperid]
+		ndhi, present := Helper[helperId]
 		if !present {
 			return nil, errors.New(`no helper name of such`)
 		}
@@ -121,13 +122,11 @@ func InterpolateTable(sql string, schema string) string {
 		schema = schema + `.`
 	}
 	re := regexp.MustCompile(`\{([a-zA-Z0-9\[\]\"\_\-]*)\}`)
-	sql = re.ReplaceAllString(sql, schema+`$1`)
-	return sql
+	return re.ReplaceAllString(sql, schema+`$1`)
 }
 
 // ReplaceQueryParamMarker replaces SQL string with parameters set as ?
 func ReplaceQueryParamMarker(preparedQuery string, paramInSeq bool, paramPlaceHolder string) string {
-
 	retstr := preparedQuery
 	defph := `?`
 	pattern := `\` + defph //search for ?
@@ -169,7 +168,7 @@ func ToDBType[T ParameterType](value any) T {
 	}
 }
 
-// Get zero value of the generic type
+// GetZero gets the zero value of the generic type
 func GetZero[T any]() T {
 	var result T
 	return result
