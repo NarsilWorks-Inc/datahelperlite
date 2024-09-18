@@ -12,3 +12,10 @@ type Pager interface {
 	SizeSet(pageId string, size int)                        // Set size of a page
 	SizeGet(pageId string) int                              // Get size of a page
 }
+
+// PagingParameter data for pagination
+type PagingParameter struct {
+	PageID     string // Page id
+	PageNumber int    // Page number
+	Expire     int    // Expiration of cache
+}
