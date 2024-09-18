@@ -1,2 +1,4 @@
 github.com/eaglebush/config v0.0.0-20240130015749-bac1ffbdfd14 h1:ub2wPERETV9kpsk+dGuxBrGGoT1/QyTxNyIKeVgJeNQ=
 github.com/eaglebush/config v0.0.0-20240130015749-bac1ffbdfd14/go.mod h1:UkGigEfx+L8E6iSiy130RcUrBl3SV9DPbisdV212wf8=
+github.com/eaglebush/pager v0.0.0-20240918012810-eac1c65a0a8a h1:glPo7JFhpBAKkEAHz0tn3XdKM8PyzxIPz4J7lXN+Fzw=
+github.com/eaglebush/pager v0.0.0-20240918012810-eac1c65a0a8a/go.mod h1:tT4ncdoeyBroLh6/+k0GMZH3PAyaUT5LoxsI2kirjM0=

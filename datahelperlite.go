@@ -10,6 +10,7 @@ import (
 	"time"
 
 	cfg "github.com/eaglebush/config"
+	pgr "github.com/eaglebush/pager"
 )
 
 // DataHelperLite interface for usage
@@ -29,7 +30,7 @@ type DataHelperLite interface {
 	Query(sql string, args ...interface{}) (Rows, error)                                // Query to a database to return one or more records
 	QueryArray(sql string, out interface{}, args ...interface{}) error                  // Query to a database to return one or more records and store to an array
 	QueryRow(sql string, args ...interface{}) Row                                       // QueryRow to a database and return one record
-	QueryPaged(pinfo PagingParameter, sql string, args ...interface{}) (Rows, error)    // Query with paged results
+	QueryPaged(pinfo pgr.Parameter, sql string, args ...interface{}) (Rows, error)      // Query with paged results
 	Rollback(...string) error                                                           // Rollback a transaction
 	Save(name string) error                                                             // Save a transaction
 	VerifyWithin(tableName string, values []VerifyExpression) (Valid bool, Error error) // VerifyWithin a set of validation expression against the underlying database table
