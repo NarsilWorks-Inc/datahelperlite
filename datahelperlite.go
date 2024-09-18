@@ -16,6 +16,7 @@ import (
 // DataHelperLite interface for usage
 type DataHelperLite interface {
 	NewHelper() DataHelperLite
+	SetPager(page *pgr.Pager, size int)                                                 // Set pager for QueryPaged
 	Begin() error                                                                       // Begin a transaction. If there is an existing transaction, begin is ignored
 	BeginDR() (string, error)                                                           // Begin a transaction with transaction id to use when rollback is deferred
 	Commit(...string) error                                                             // Commit the transaction
@@ -73,8 +74,10 @@ type ParameterType interface {
 	VarChar | VarCharMax | NVarCharMax
 }
 
-// Helper for datahelperlite
-var Helper map[string]DataHelperLite
+var (
+	Helper map[string]DataHelperLite
+	Pager  pgr.Pager
+)
 
 // Errors
 var (
@@ -112,6 +115,10 @@ func SetHelper(name string, dhl DataHelperLite) {
 		Helper = make(map[string]DataHelperLite)
 	}
 	Helper[name] = dhl
+}
+
+func SetPager(page *pgr.Pager) {
+	Pager = *page
 }
 
 // SetErrNoRows sets the error when there are no rows
