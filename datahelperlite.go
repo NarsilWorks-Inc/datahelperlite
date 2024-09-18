@@ -10,13 +10,11 @@ import (
 	"time"
 
 	cfg "github.com/eaglebush/config"
-	pgr "github.com/eaglebush/pager"
 )
 
 // DataHelperLite interface for usage
 type DataHelperLite interface {
 	NewHelper() DataHelperLite
-	SetPager(page *pgr.Pager, size int)                                                 // Set pager for QueryPaged
 	Begin() error                                                                       // Begin a transaction. If there is an existing transaction, begin is ignored
 	BeginDR() (string, error)                                                           // Begin a transaction with transaction id to use when rollback is deferred
 	Commit(...string) error                                                             // Commit the transaction
@@ -31,7 +29,6 @@ type DataHelperLite interface {
 	Query(sql string, args ...interface{}) (Rows, error)                                // Query to a database to return one or more records
 	QueryArray(sql string, out interface{}, args ...interface{}) error                  // Query to a database to return one or more records and store to an array
 	QueryRow(sql string, args ...interface{}) Row                                       // QueryRow to a database and return one record
-	QueryPaged(pinfo pgr.Parameter, sql string, args ...interface{}) (Rows, error)      // Query with paged results
 	Rollback(...string) error                                                           // Rollback a transaction
 	Save(name string) error                                                             // Save a transaction
 	VerifyWithin(tableName string, values []VerifyExpression) (Valid bool, Error error) // VerifyWithin a set of validation expression against the underlying database table
@@ -76,7 +73,6 @@ type ParameterType interface {
 
 var (
 	Helper map[string]DataHelperLite
-	Pager  pgr.Pager
 )
 
 // Errors
@@ -85,7 +81,6 @@ var (
 	ErrArrayTypeNotSupported error = errors.New(`array type not supported`)
 	ErrNoConn                error = errors.New(`no connection of the object was initialized`)
 	ErrNoTx                  error = errors.New(`no transaction was initialized`)
-	ErrNoPagerSet            error = errors.New(`no pager was set or initialized`)
 	ErrVarMustBeInit         error = errors.New(`variable in next parameter must be initialized`)
 )
 
@@ -115,10 +110,6 @@ func SetHelper(name string, dhl DataHelperLite) {
 		Helper = make(map[string]DataHelperLite)
 	}
 	Helper[name] = dhl
-}
-
-func SetPager(page *pgr.Pager) {
-	Pager = *page
 }
 
 // SetErrNoRows sets the error when there are no rows
