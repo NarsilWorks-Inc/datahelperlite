@@ -79,10 +79,11 @@ var Helper map[string]DataHelperLite
 // Errors
 var (
 	ErrNoRows                error // ErrNoRows for no rows returned
+	ErrArrayTypeNotSupported error = errors.New(`array type not supported`)
 	ErrNoConn                error = errors.New(`no connection of the object was initialized`)
 	ErrNoTx                  error = errors.New(`no transaction was initialized`)
+	ErrNoPagerSet            error = errors.New(`no pager was set or initialized`)
 	ErrVarMustBeInit         error = errors.New(`variable in next parameter must be initialized`)
-	ErrArrayTypeNotSupported error = errors.New(`array type not supported`)
 )
 
 // New creates new datahelper lite
