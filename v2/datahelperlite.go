@@ -84,6 +84,7 @@ var (
 	ErrNoConn                error = errors.New(`no connection of the object was initialized`)
 	ErrNoTx                  error = errors.New(`no transaction was initialized`)
 	ErrVarMustBeInit         error = errors.New(`variable in next parameter must be initialized`)
+	ErrNoConnStr             error = errors.New(`connection string not set`)
 )
 
 // New creates new datahelper lite
