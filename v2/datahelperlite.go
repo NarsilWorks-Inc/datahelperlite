@@ -1,5 +1,8 @@
 package datahelperlite
 
+// Package DataHelperLite
+// v2.0
+// 2025.03.01
 import (
 	"context"
 	"errors"
