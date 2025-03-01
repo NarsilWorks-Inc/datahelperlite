@@ -12,7 +12,7 @@ import (
 	"strings"
 	"time"
 
-	cdn "github.com/NarsilWorks-Inc/cmndatainfo"
+	dn "github.com/eaglebush/datainfo"
 )
 
 // DataHelperLite interface for usage
@@ -27,7 +27,7 @@ type DataHelperLite interface {
 	Exists(sqlWithParams string, args ...any) (bool, error)                             // Checks existence of a record
 	Mark(name string) error                                                             // Mark a savepoint
 	Next(serial string, next *int64) error                                              // Get next value of a serial
-	Open(ctx context.Context, di *cdn.CommonDataInfo) error                             // Open a new connection
+	Open(ctx context.Context, di *dn.DataInfo) error                                    // Open a new connection
 	Query(sql string, args ...any) (Rows, error)                                        // Query to a database to return one or more records
 	QueryArray(sql string, out any, args ...any) error                                  // Query to a database to return one or more records and store to an array
 	QueryRow(sql string, args ...any) Row                                               // QueryRow to a database and return one record
