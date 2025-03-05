@@ -1,4 +1,4 @@
 github.com/eaglebush/config v0.0.0-20241112071821-d764539c5f47 h1:oHVsx2R5OMHnCs+dhAj4HV96fn6Otvrkj+9QzqrFT1A=
 github.com/eaglebush/config v0.0.0-20241112071821-d764539c5f47/go.mod h1:UkGigEfx+L8E6iSiy130RcUrBl3SV9DPbisdV212wf8=
-github.com/eaglebush/datainfo v0.0.0-20250301085159-138389cbb07f h1:whIvNn/HrAI1Feq81WnMpCciP+aDqJiFy+BLF9P52ds=
-github.com/eaglebush/datainfo v0.0.0-20250301085159-138389cbb07f/go.mod h1:0C7PVnqcTw/HMZlI6ihwKNYHFRA35DYFf96nqy2C31I=
+github.com/eaglebush/datainfo v0.0.0-20250304235132-820af008ea0c h1:qKdPCyfIkwN5K4jxDzPDamwyz4Np1zD6Jqqy8GAPACk=
+github.com/eaglebush/datainfo v0.0.0-20250304235132-820af008ea0c/go.mod h1:0C7PVnqcTw/HMZlI6ihwKNYHFRA35DYFf96nqy2C31I=
