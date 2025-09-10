@@ -14,8 +14,9 @@ import (
 
 // DataHelperLite interface for usage
 type DataHelperLite interface {
-	NewHelper() DataHelperLite
-	Begin() error                                                                       // Begin a transaction. If there is an existing transaction, begin is ignored
+	NewHelper() DataHelperLite                                                          // Create a new helper
+	Begin() error                                                                       // Begin a transaction that supports deferred rollback.
+	BeginManually() error                                                               // Begin a transaction that should be committed or rolled back manually.
 	Commit() error                                                                      // Commit the transaction
 	Close() error                                                                       // Close connection
 	Discard(name string) error                                                          // Discard a savepoint

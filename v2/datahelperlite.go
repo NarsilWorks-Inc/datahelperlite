@@ -17,8 +17,9 @@ import (
 
 // DataHelperLite interface for usage
 type DataHelperLite interface {
-	NewHelper() DataHelperLite
-	Begin() error                                                                       // Begin a transaction. If there is an existing transaction, begin is ignored
+	NewHelper() DataHelperLite                                                          // Create a new helper
+	Begin() error                                                                       // Begin a transaction that supports deferred rollback.
+	BeginManually() error                                                               // Begin a transaction that should be committed or rolled back manually.
 	Commit() error                                                                      // Commit the transaction
 	Close() error                                                                       // Close connection
 	Discard(name string) error                                                          // Discard a savepoint
@@ -89,10 +90,7 @@ var (
 
 // New creates new datahelper lite
 func New(dhl *DataHelperLite, helperId string) (DataHelperLite, error) {
-	var (
-		ndh DataHelperLite
-	)
-	// copy existing postgresql helper
+	var ndh DataHelperLite
 	if dhl != nil {
 		ndh = *dhl
 	}
@@ -101,7 +99,6 @@ func New(dhl *DataHelperLite, helperId string) (DataHelperLite, error) {
 		if !present {
 			return nil, errors.New(`no helper name of such`)
 		}
-		// create new helper instance
 		ndh = ndhi.NewHelper()
 	}
 	return ndh, nil
