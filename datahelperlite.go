@@ -30,6 +30,7 @@ type DataHelperLite interface {
 	NowUTC() *time.Time                                                                 // Get the time in UTC
 	Open(ctx context.Context, di *cfg.DatabaseInfo) error                               // Open a new connection
 	PoolSet()                                                                           // Indicates that the helper is using externally initialized helper
+	PoolUnset()                                                                         // Set pool to unset
 	Ping() error                                                                        // Ping the connection of the helper
 	Query(sql string, args ...any) (Rows, error)                                        // Query to a database to return one or more records
 	QueryArray(sql string, out any, args ...any) error                                  // Query to a database to return one or more records and store to an array
