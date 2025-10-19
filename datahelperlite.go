@@ -3,6 +3,7 @@ package datahelperlite
 import (
 	"context"
 	"errors"
+	"fmt"
 	"reflect"
 	"regexp"
 	"strconv"
@@ -30,6 +31,7 @@ type DataHelperLite interface {
 	Now() *time.Time                                                                    // Get time now
 	NowUTC() *time.Time                                                                 // Get the time in UTC
 	Open(ctx context.Context, di *cfg.DatabaseInfo) error                               // Open a new connection
+	Pooled() bool                                                                       // Indicates that the current helper was pooled (by PoolSet() method)
 	PoolSet()                                                                           // Indicates that the helper is using externally initialized helper
 	PoolUnset()                                                                         // Set pool to unset
 	Ping() error                                                                        // Ping the connection of the helper
@@ -88,24 +90,16 @@ var (
 	ErrVarMustBeInit         error = errors.New(`variable in next parameter must be initialized`)
 )
 
-// New creates new datahelper lite
+// New creates new datahelper lite if the dhl (*DataHelperLite) parameter is null.
 func New(dhl *DataHelperLite, helperId string) (DataHelperLite, error) {
-	var (
-		ndh DataHelperLite
-	)
-	// copy existing postgresql helper
 	if dhl != nil {
-		ndh = *dhl
+		return *dhl, nil
 	}
-	if ndh == nil {
-		ndhi, present := Helper[helperId]
-		if !present {
-			return nil, errors.New(`no helper name of such`)
-		}
-		// create new helper instance
-		ndh = ndhi.NewHelper()
+	ndh, present := Helper[helperId]
+	if !present {
+		return nil, fmt.Errorf("'%s' helper name is invalid", helperId)
 	}
-	return ndh, nil
+	return ndh.NewHelper(), nil
 }
 
 // SetHelper - set helper object
