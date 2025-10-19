@@ -22,22 +22,24 @@ type DataHelperLite interface {
 	BeginManually() error                                                               // Begin a transaction that should be committed or rolled back manually.
 	Commit() error                                                                      // Commit the transaction
 	Close() error                                                                       // Close connection
+	DatabaseVersion() string                                                            // Get database version
 	Discard(name string) error                                                          // Discard a savepoint
 	Escape(fv string) string                                                            // Escape a field value (fv) from disruption by single quote
 	Exec(sql string, args ...any) (int64, error)                                        // Exec executes a non-returning query
 	Exists(sqlWithParams string, args ...any) (bool, error)                             // Checks existence of a record
 	Mark(name string) error                                                             // Mark a savepoint
 	Next(serial string, next *int64) error                                              // Get next value of a serial
+	Now() *time.Time                                                                    // Get time now
+	NowUTC() *time.Time                                                                 // Get the time in UTC
 	Open(ctx context.Context, di *dn.DataInfo) error                                    // Open a new connection
+	PoolSet()                                                                           // Indicates that the helper is using externally initialized helper
+	Ping() error                                                                        // Ping the connection of the helper
 	Query(sql string, args ...any) (Rows, error)                                        // Query to a database to return one or more records
 	QueryArray(sql string, out any, args ...any) error                                  // Query to a database to return one or more records and store to an array
 	QueryRow(sql string, args ...any) Row                                               // QueryRow to a database and return one record
 	Rollback() error                                                                    // Rollback a transaction
 	Save(name string) error                                                             // Save a transaction
 	VerifyWithin(tableName string, values []VerifyExpression) (Valid bool, Error error) // VerifyWithin a set of validation expression against the underlying database table
-	DatabaseVersion() string                                                            // Get database version
-	Now() *time.Time                                                                    // Get time now
-	NowUTC() *time.Time                                                                 // Get the time in UTC
 }
 
 // ReadType - read types in data retrieval
