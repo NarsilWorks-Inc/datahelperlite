@@ -92,7 +92,7 @@ var (
 
 // New creates new datahelper lite if the dhl (*DataHelperLite) parameter is null.
 func New(dhl *DataHelperLite, helperId string) (DataHelperLite, error) {
-	if dhl != nil {
+	if !isReallyNil(dhl) {
 		return *dhl, nil
 	}
 	ndh, present := Helper[helperId]
@@ -104,7 +104,7 @@ func New(dhl *DataHelperLite, helperId string) (DataHelperLite, error) {
 
 // SetHelper - set helper object
 func SetHelper(name string, dhl DataHelperLite) {
-	if Helper == nil {
+	if isReallyNil(Helper) {
 		Helper = make(map[string]DataHelperLite)
 	}
 	Helper[name] = dhl
@@ -149,7 +149,7 @@ func ReplaceQueryParamMarker(preparedQuery string, paramInSeq bool, paramPlaceHo
 
 // ToDBType converts string or string types to desired DBType
 func ToDBType[T ParameterType](value any) T {
-	if value == nil {
+	if isReallyNil(value) {
 		return GetZero[T]()
 	}
 	switch t := value.(type) {
@@ -171,4 +171,20 @@ func ToDBType[T ParameterType](value any) T {
 func GetZero[T any]() T {
 	var result T
 	return result
+}
+
+func isReallyNil(i any) bool {
+	if i == nil {
+		return true
+	}
+	iv := reflect.ValueOf(i)
+	if !iv.IsValid() {
+		return true
+	}
+	switch iv.Kind() {
+	case reflect.Pointer, reflect.Slice, reflect.Map, reflect.Func, reflect.Interface:
+		return iv.IsNil()
+	default:
+		return false
+	}
 }
