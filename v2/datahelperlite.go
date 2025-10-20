@@ -181,14 +181,26 @@ func isReallyNil(i any) bool {
 	if i == nil {
 		return true
 	}
-	iv := reflect.ValueOf(i)
-	if !iv.IsValid() {
+	v := reflect.ValueOf(i)
+	if !v.IsValid() {
 		return true
 	}
-	switch iv.Kind() {
-	case reflect.Pointer, reflect.Slice, reflect.Map, reflect.Func, reflect.Interface:
-		return iv.IsNil()
-	default:
-		return false
+	if v.Kind() == reflect.Interface {
+		if v.IsNil() {
+			return true
+		}
+		elem := v.Elem()
+		if !elem.IsValid() {
+			return true
+		}
+		switch elem.Kind() {
+		case reflect.Pointer, reflect.Slice, reflect.Map, reflect.Func, reflect.Interface:
+			return elem.IsNil()
+		}
 	}
+	switch v.Kind() {
+	case reflect.Pointer, reflect.Slice, reflect.Map, reflect.Func, reflect.Interface:
+		return v.IsNil()
+	}
+	return false
 }
