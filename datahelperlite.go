@@ -91,9 +91,9 @@ var (
 )
 
 // New creates new datahelper lite if the dhl (*DataHelperLite) parameter is null.
-func New(dhl *DataHelperLite, helperId string) (DataHelperLite, error) {
-	if !isReallyNil(dhl) {
-		return *dhl, nil
+func New(dhl DataHelperLite, helperId string) (DataHelperLite, error) {
+	if dhl != nil {
+		return dhl, nil
 	}
 	ndh, present := Helper[helperId]
 	if !present {
@@ -104,7 +104,7 @@ func New(dhl *DataHelperLite, helperId string) (DataHelperLite, error) {
 
 // SetHelper - set helper object
 func SetHelper(name string, dhl DataHelperLite) {
-	if isReallyNil(Helper) {
+	if Helper == nil {
 		Helper = make(map[string]DataHelperLite)
 	}
 	Helper[name] = dhl
