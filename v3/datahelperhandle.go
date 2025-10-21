@@ -23,15 +23,22 @@ type DataHelperHandle struct {
 var (
 	ErrNoConn    error = errors.New(`no connection of the object was initialized`)
 	ErrNoConnStr error = errors.New(`connection string not set`)
+	ErrNoHandle  error = errors.New(`no sql handle`)
 )
 
 // Open connects to the database and initializes it
 func (h *DataHelperHandle) Open(di *dn.DataInfo) error {
-	h.dbi = di
-	h.db, h.err = sql.Open(`sqlserver`, *di.ConnectionString)
+	if di == nil {
+		return fmt.Errorf("open: no data info set")
+	}
+	if di.ConnectionString == nil {
+		return fmt.Errorf("open: no data connection string set")
+	}
+	h.db, h.err = sql.Open("sqlserver", *di.ConnectionString)
 	if h.err != nil {
 		return fmt.Errorf("open: %w", h.err)
 	}
+	h.dbi = di
 	if di.MaxOpenConnection != nil {
 		h.db.SetMaxOpenConns(*di.MaxOpenConnection)
 	}
@@ -55,7 +62,7 @@ func (h *DataHelperHandle) Open(di *dn.DataInfo) error {
 // Ping tests the database connection
 func (h *DataHelperHandle) Ping() error {
 	if h.db == nil {
-		return fmt.Errorf("ping: no sql handle to use")
+		return fmt.Errorf("ping: %s to use", ErrNoHandle)
 	}
 	if err := h.db.PingContext(context.Background()); err != nil {
 		h.err = fmt.Errorf("ping: %w", err)
@@ -69,14 +76,24 @@ func (h *DataHelperHandle) DB() *sql.DB {
 	return h.db
 }
 
+// DI returns the data info that configured the handle
+func (h *DataHelperHandle) DI() *dn.DataInfo {
+	return h.dbi
+}
+
 // Close the database connection
 func (h *DataHelperHandle) Close() error {
 	if h.db == nil {
-		return fmt.Errorf("ping: no sql handle to close")
+		return fmt.Errorf("ping: %s to close", ErrNoHandle)
 	}
 	if h.err = h.db.Close(); h.err != nil {
 		return h.err
 	}
 	h.db = nil
 	return nil
+}
+
+// Err returns the last error
+func (h *DataHelperHandle) Err() error {
+	return h.err
 }
