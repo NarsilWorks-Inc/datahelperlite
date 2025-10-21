@@ -1,8 +1,8 @@
 package datahelperlite
 
 // Package DataHelperLite
-// v2.0
-// 2025.03.01
+// v3.0
+// 2025.10.21
 import (
 	"context"
 	"errors"
@@ -18,28 +18,28 @@ import (
 
 // DataHelperLite interface for usage
 type DataHelperLite interface {
-	NewHelper() DataHelperLite                                                          // Create a new helper
-	Begin() error                                                                       // Begin a transaction that supports deferred rollback.
-	BeginManually() error                                                               // Begin a transaction that should be committed or rolled back manually.
-	Commit() error                                                                      // Commit the transaction
-	Close() error                                                                       // Close connection
-	DatabaseVersion() string                                                            // Get database version
-	Discard(name string) error                                                          // Discard a savepoint
-	Escape(fv string) string                                                            // Escape a field value (fv) from disruption by single quote
-	Exec(sql string, args ...any) (int64, error)                                        // Exec executes a non-returning query
-	Exists(sqlWithParams string, args ...any) (bool, error)                             // Checks existence of a record
-	Mark(name string) error                                                             // Mark a savepoint
-	Next(serial string, next *int64) error                                              // Get next value of a serial
-	Now() *time.Time                                                                    // Get time now
-	NowUTC() *time.Time                                                                 // Get the time in UTC
-	Open(ctx context.Context, di *dn.DataInfo) error                                    // Open a new connection
-	Ping() error                                                                        // Ping the connection of the helper
-	Query(sql string, args ...any) (Rows, error)                                        // Query to a database to return one or more records
-	QueryArray(sql string, out any, args ...any) error                                  // Query to a database to return one or more records and store to an array
-	QueryRow(sql string, args ...any) Row                                               // QueryRow to a database and return one record
-	Rollback() error                                                                    // Rollback a transaction
-	Save(name string) error                                                             // Save a transaction
-	VerifyWithin(tableName string, values []VerifyExpression) (Valid bool, Error error) // VerifyWithin a set of validation expression against the underlying database table
+	NewHelper() DataHelperLite                              // Create a new helper
+	Acquire(ctx context.Context) error                      // Acquire sets all queries to a new context to isolate from pool context.
+	Begin() error                                           // Begin a transaction that supports deferred rollback.
+	BeginManually() error                                   // Begin a transaction that should be committed or rolled back manually.
+	Commit() error                                          // Commit the transaction
+	Close() error                                           // Close connection
+	DatabaseVersion() string                                // Get database version
+	Discard(name string) error                              // Discard a savepoint
+	Escape(fv string) string                                // Escape a field value (fv) from disruption by single quote
+	Exec(sql string, args ...any) (int64, error)            // Exec executes a non-returning query
+	Exists(sqlWithParams string, args ...any) (bool, error) // Checks existence of a record
+	Mark(name string) error                                 // Mark a savepoint
+	Next(serial string, next *int64) error                  // Get next value of a serial
+	Now() *time.Time                                        // Get time now
+	NowUTC() *time.Time                                     // Get the time in UTC
+	Open(di *dn.DataInfo) error                             // Open a new connection
+	Ping() error                                            // Ping the connection of the helper
+	Query(sql string, args ...any) (Rows, error)            // Query to a database to return one or more records
+	QueryArray(sql string, out any, args ...any) error      // Query to a database to return one or more records and store to an array
+	QueryRow(sql string, args ...any) Row                   // QueryRow to a database and return one record
+	Rollback() error                                        // Rollback a transaction
+	Save(name string) error                                 // Save a transaction
 }
 
 // ReadType - read types in data retrieval
@@ -50,19 +50,18 @@ type ReturnKind string
 
 // ReadTypes for data access
 const (
-	READALL           ReadType = `all`   // Read all
-	READBYKEY         ReadType = `key`   // Read by key
-	READBYLATERALKEYS ReadType = `lkeys` // Read by lateral keys
-	READBYCODE        ReadType = `code`  // Read by code
-	READFORFORM       ReadType = `form`  // Read for form
-	READELSE          ReadType = `else`  // Read else
+	ReadAll           ReadType = `all`   // Read all
+	ReadByKey         ReadType = `key`   // Read by key
+	ReadByLateralKeys ReadType = `lkeys` // Read by lateral keys
+	ReadByCode        ReadType = `code`  // Read by code
+	ReadElse          ReadType = `else`  // Read else
 )
 
 // ReturnKind returns the data depends on kind
 const (
-	RETURNALL       ReturnKind = `all`
-	RETURNFORFORM   ReturnKind = `form`
-	RETURNESSENTIAL ReturnKind = `essential`
+	ReturnAll       ReturnKind = `all`
+	ReturnForForm   ReturnKind = `form`
+	ReturnEssential ReturnKind = `essential`
 )
 
 // Parameter Types
@@ -90,7 +89,7 @@ var (
 	ErrNoConnStr             error = errors.New(`connection string not set`)
 )
 
-// New creates new datahelper lite if the dhl (*DataHelperLite) parameter is null.
+// New creates new datahelper lite if the dhl parameter is null.
 func New(dhl DataHelperLite, helperId string) (DataHelperLite, error) {
 	if dhl != nil {
 		return dhl, nil
@@ -149,8 +148,9 @@ func ReplaceQueryParamMarker(preparedQuery string, paramInSeq bool, paramPlaceHo
 
 // ToDBType converts string or string types to desired DBType
 func ToDBType[T ParameterType](value any) T {
+	var result T
 	if isReallyNil(value) {
-		return GetZero[T]()
+		return result
 	}
 	switch t := value.(type) {
 	case string:
@@ -165,12 +165,6 @@ func ToDBType[T ParameterType](value any) T {
 		x := v.String()
 		return T(x)
 	}
-}
-
-// GetZero gets the zero value of the generic type
-func GetZero[T any]() T {
-	var result T
-	return result
 }
 
 func isReallyNil(i any) bool {
