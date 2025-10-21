@@ -3,6 +3,7 @@ package datahelperlite
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"fmt"
 	"time"
 
@@ -17,6 +18,12 @@ type DataHelperHandle struct {
 	dbi *dn.DataInfo
 	err error
 }
+
+// Errors
+var (
+	ErrNoConn    error = errors.New(`no connection of the object was initialized`)
+	ErrNoConnStr error = errors.New(`connection string not set`)
+)
 
 // Open connects to the database and initializes it
 func (h *DataHelperHandle) Open(di *dn.DataInfo) error {
@@ -55,6 +62,11 @@ func (h *DataHelperHandle) Ping() error {
 		return h.err
 	}
 	return nil
+}
+
+// DB returns the database handle
+func (h *DataHelperHandle) DB() *sql.DB {
+	return h.db
 }
 
 // Close the database connection

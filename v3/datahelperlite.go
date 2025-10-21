@@ -80,10 +80,9 @@ var (
 var (
 	ErrNoRows                error // ErrNoRows for no rows returned
 	ErrArrayTypeNotSupported error = errors.New(`array type not supported`)
-	ErrNoConn                error = errors.New(`no connection of the object was initialized`)
 	ErrNoTx                  error = errors.New(`no transaction was initialized`)
 	ErrVarMustBeInit         error = errors.New(`variable in next parameter must be initialized`)
-	ErrNoConnStr             error = errors.New(`connection string not set`)
+	ErrHandleNotSet          error = errors.New(`handle not set`)
 )
 
 // New creates new datahelper lite if the dhl parameter is null.
