@@ -1,8 +1,9 @@
-package datahelperlite
-
 // Package DataHelperLite
+//
 // v3.0
 // 2025.10.21
+package datahelperlite
+
 import (
 	"context"
 	"errors"
@@ -12,18 +13,15 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	dn "github.com/eaglebush/datainfo"
 )
 
-// DataHelperLite interface for usage
+// DataHelperLite interface
 type DataHelperLite interface {
 	NewHelper() DataHelperLite                              // Create a new helper
-	Acquire(ctx context.Context) error                      // Acquire sets all queries to a new context to isolate from pool context.
+	Acquire(ctx context.Context, h DataHelperHandle) error  // Acquire sets all queries to a new context to isolate from pool context.
 	Begin() error                                           // Begin a transaction that supports deferred rollback.
 	BeginManually() error                                   // Begin a transaction that should be committed or rolled back manually.
 	Commit() error                                          // Commit the transaction
-	Close() error                                           // Close connection
 	DatabaseVersion() string                                // Get database version
 	Discard(name string) error                              // Discard a savepoint
 	Escape(fv string) string                                // Escape a field value (fv) from disruption by single quote
@@ -33,7 +31,6 @@ type DataHelperLite interface {
 	Next(serial string, next *int64) error                  // Get next value of a serial
 	Now() *time.Time                                        // Get time now
 	NowUTC() *time.Time                                     // Get the time in UTC
-	Open(di *dn.DataInfo) error                             // Open a new connection
 	Ping() error                                            // Ping the connection of the helper
 	Query(sql string, args ...any) (Rows, error)            // Query to a database to return one or more records
 	QueryArray(sql string, out any, args ...any) error      // Query to a database to return one or more records and store to an array
