@@ -17,26 +17,27 @@ import (
 
 // DataHelperLite interface
 type DataHelperLite interface {
-	NewHelper() DataHelperLite                              // Create a new helper
-	Acquire(ctx context.Context, h *DataHelperHandle) error // Acquire sets all queries to a new context to isolate from pool context.
-	Begin() error                                           // Begin a transaction that supports deferred rollback.
-	BeginManually() error                                   // Begin a transaction that should be committed or rolled back manually.
-	Commit() error                                          // Commit the transaction
-	DatabaseVersion() string                                // Get database version
-	Discard(name string) error                              // Discard a savepoint
-	Escape(fv string) string                                // Escape a field value (fv) from disruption by single quote
-	Exec(sql string, args ...any) (int64, error)            // Exec executes a non-returning query
-	Exists(sqlWithParams string, args ...any) (bool, error) // Checks existence of a record
-	Mark(name string) error                                 // Mark a savepoint
-	Next(serial string, next *int64) error                  // Get next value of a serial
-	Now() *time.Time                                        // Get time now
-	NowUTC() *time.Time                                     // Get the time in UTC
-	Ping() error                                            // Ping the connection of the helper
-	Query(sql string, args ...any) (Rows, error)            // Query to a database to return one or more records
-	QueryArray(sql string, out any, args ...any) error      // Query to a database to return one or more records and store to an array
-	QueryRow(sql string, args ...any) Row                   // QueryRow to a database and return one record
-	Rollback() error                                        // Rollback a transaction
-	Save(name string) error                                 // Save a transaction
+	NewHelper() DataHelperLite                                       // Create a new helper
+	Acquire(ctx context.Context, h *DataHelperHandle) error          // Acquire sets all queries to a new context to isolate from pool context.
+	Begin() error                                                    // Begin a transaction that supports deferred rollback.
+	BeginManually() error                                            // Begin a transaction that should be committed or rolled back manually.
+	Commit() error                                                   // Commit the transaction
+	DatabaseVersion() string                                         // Get database version
+	Discard(name string) error                                       // Discard a savepoint
+	Escape(fv string) string                                         // Escape a field value (fv) from disruption by single quote
+	Exec(sql string, args ...any) (int64, error)                     // Exec executes a non-returning query
+	Exists(sqlWithParams string, args ...any) (bool, error)          // Checks existence of a record
+	ExistsExt(tableName string, values []ColumnFilter) (bool, error) // Checks existence of a record by using a set of column filters against the underlying database table
+	Mark(name string) error                                          // Mark a savepoint
+	Next(serial string, next *int64) error                           // Get next value of a serial
+	Now() *time.Time                                                 // Get time now
+	NowUTC() *time.Time                                              // Get the time in UTC
+	Ping() error                                                     // Ping the connection of the helper
+	Query(sql string, args ...any) (Rows, error)                     // Query to a database to return one or more records
+	QueryArray(sql string, out any, args ...any) error               // Query to a database to return one or more records and store to an array
+	QueryRow(sql string, args ...any) Row                            // QueryRow to a database and return one record
+	Rollback() error                                                 // Rollback a transaction
+	Save(name string) error                                          // Save a transaction
 }
 
 // ReadType - read types in data retrieval
