@@ -3,12 +3,13 @@ package datahelperlite
 import (
 	"database/sql"
 	"errors"
+	"fmt"
 
 	dn "github.com/eaglebush/datainfo"
 )
 
 var (
-	Handler DataHelperHandle
+	Handler map[string]DataHelperHandle
 )
 
 // DataHelperHandle manages the handle to the database connection
@@ -30,6 +31,19 @@ var (
 	ErrHandleNoHandle  error = errors.New(`no sql handle`)
 )
 
-func NewHandle() DataHelperHandle {
-	return Handler
+// New creates new datahelper lite if the dhl parameter is null.
+func NewHandle(helperId string) (DataHelperHandle, error) {
+	hnd, present := Handler[helperId]
+	if !present {
+		return nil, fmt.Errorf("'%s' helper name is invalid", helperId)
+	}
+	return hnd, nil
+}
+
+// SetHandler sets the internal handler object
+func SetHandler(name string, hndl DataHelperHandle) {
+	if Handler == nil {
+		Handler = make(map[string]DataHelperHandle)
+	}
+	Handler[name] = hndl
 }

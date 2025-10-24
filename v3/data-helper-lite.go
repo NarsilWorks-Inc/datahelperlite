@@ -98,7 +98,7 @@ func New(dhl DataHelperLite, helperId string) (DataHelperLite, error) {
 	return ndh.NewHelper(), nil
 }
 
-// SetHelper - set helper object
+// SetHelper sets the internal helper object
 func SetHelper(name string, dhl DataHelperLite) {
 	if Helper == nil {
 		Helper = make(map[string]DataHelperLite)
