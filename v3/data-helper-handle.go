@@ -10,7 +10,7 @@ import (
 // DataHelperHandle manages the handle to the database connection
 //
 // It manages the resident database connection for proper pooling
-type DataHelperHandle interface {
+type DataHelperHandler interface {
 	Open(di *dn.DataInfo) error
 	Ping() error
 	DB() *sql.DB
