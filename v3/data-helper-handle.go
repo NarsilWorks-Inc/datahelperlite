@@ -11,6 +11,7 @@ import (
 //
 // It manages the resident database connection for proper pooling
 type DataHelperHandle interface {
+	NewHandle() DataHelperHandle
 	Open(di *dn.DataInfo) error
 	Ping() error
 	DB() *sql.DB
