@@ -18,7 +18,7 @@ import (
 // DataHelperLite interface
 type DataHelperLite interface {
 	NewHelper() DataHelperLite                                       // Create a new helper
-	Acquire(ctx context.Context, h *DataHelperHandle) error          // Acquire sets all queries to a new context to isolate from pool context.
+	Acquire(ctx context.Context, h DataHelperHandle) error           // Acquire sets all queries to a new context to isolate from pool context.
 	Begin() error                                                    // Begin a transaction that supports deferred rollback.
 	BeginManually() error                                            // Begin a transaction that should be committed or rolled back manually.
 	Commit() error                                                   // Commit the transaction
