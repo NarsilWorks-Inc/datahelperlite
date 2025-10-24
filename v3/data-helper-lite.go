@@ -16,9 +16,9 @@ import (
 )
 
 // DataHelperLite interface
-type DataHelperLiter interface {
-	NewHelper() DataHelperLiter                                      // Create a new helper
-	Acquire(ctx context.Context, h DataHelperHandler) error          // Acquire sets all queries to a new context to isolate from pool context.
+type DataHelperLite interface {
+	NewHelper() DataHelperLite                                       // Create a new helper
+	Acquire(ctx context.Context, h DataHelperHandle) error           // Acquire sets all queries to a new context to isolate from pool context.
 	Begin() error                                                    // Begin a transaction that supports deferred rollback.
 	BeginManually() error                                            // Begin a transaction that should be committed or rolled back manually.
 	Commit() error                                                   // Commit the transaction
@@ -74,7 +74,7 @@ type ParameterType interface {
 }
 
 var (
-	Helper map[string]DataHelperLiter
+	Helper map[string]DataHelperLite
 )
 
 // Errors
@@ -87,7 +87,7 @@ var (
 )
 
 // New creates new datahelper lite if the dhl parameter is null.
-func New(dhl DataHelperLiter, helperId string) (DataHelperLiter, error) {
+func New(dhl DataHelperLite, helperId string) (DataHelperLite, error) {
 	if dhl != nil {
 		return dhl, nil
 	}
@@ -99,9 +99,9 @@ func New(dhl DataHelperLiter, helperId string) (DataHelperLiter, error) {
 }
 
 // SetHelper - set helper object
-func SetHelper(name string, dhl DataHelperLiter) {
+func SetHelper(name string, dhl DataHelperLite) {
 	if Helper == nil {
-		Helper = make(map[string]DataHelperLiter)
+		Helper = make(map[string]DataHelperLite)
 	}
 	Helper[name] = dhl
 }
