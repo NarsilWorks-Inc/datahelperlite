@@ -7,11 +7,14 @@ import (
 	dn "github.com/eaglebush/datainfo"
 )
 
+var (
+	Handler DataHelperHandle
+)
+
 // DataHelperHandle manages the handle to the database connection
 //
 // It manages the resident database connection for proper pooling
 type DataHelperHandle interface {
-	NewHandle() DataHelperHandle
 	Open(di *dn.DataInfo) error
 	Ping() error
 	DB() *sql.DB
@@ -26,3 +29,7 @@ var (
 	ErrHandleNoConnStr error = errors.New(`connection string not set`)
 	ErrHandleNoHandle  error = errors.New(`no sql handle`)
 )
+
+func NewHandle() DataHelperHandle {
+	return Handler
+}
