@@ -1,4 +1,4 @@
-github.com/eaglebush/config v0.1.0 h1:U06f6f40qmPOy8udS0l9V3bc0VcdUMBUNW2WG4kLooc=
-github.com/eaglebush/config v0.1.0/go.mod h1:UkGigEfx+L8E6iSiy130RcUrBl3SV9DPbisdV212wf8=
+github.com/eaglebush/config v0.1.4 h1:MXxMTLC6iDQjTb93PxRY5rqJFnkv1707/k4Cwl9lQ1o=
+github.com/eaglebush/config v0.1.4/go.mod h1:UkGigEfx+L8E6iSiy130RcUrBl3SV9DPbisdV212wf8=
 github.com/eaglebush/datainfo v0.1.0 h1:tDQg2UcPrw6Lkjj98L3IS6hCCu4IhDCMr9Md4mb2maM=
 github.com/eaglebush/datainfo v0.1.0/go.mod h1:X+/1ax+ZMKkVl+E5BDu+SE2TXxNYsF7OaO0kDzFyYcE=

@@ -84,6 +84,7 @@ var (
 	ErrNoTx                  error = errors.New(`no transaction was initialized`)
 	ErrVarMustBeInit         error = errors.New(`variable in next parameter must be initialized`)
 	ErrHandleNotSet          error = errors.New(`handle not set`)
+	ErrHandleDBNotSet        error = errors.New(`handle db not set`)
 )
 
 // New creates new datahelper lite if the dhl parameter is null.
