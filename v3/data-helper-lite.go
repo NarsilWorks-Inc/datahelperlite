@@ -38,6 +38,8 @@ type DataHelperLite interface {
 	QueryRow(sql string, args ...any) Row                            // QueryRow to a database and return one record
 	Rollback() error                                                 // Rollback a transaction
 	Save(name string) error                                          // Save a transaction
+	VendorStatement(key string) string                               // Returns a vendor-specific statement or query when present. Returns an empty string if not present
+	VendorStatements() []string                                      // Lists the vendor-specific statements implemented in a helper
 }
 
 // ReadType - read types in data retrieval
