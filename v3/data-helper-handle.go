@@ -105,7 +105,7 @@ func Reconnect(
 					}
 
 					if err := hndl.Open(di); err != nil {
-						logger("Database error: %v", err)
+						logger("Database error: %v", err.Error())
 						continue
 					}
 
@@ -118,7 +118,7 @@ func Reconnect(
 
 				// Ping to check connection
 				if err := hndl.Ping(); err != nil {
-					logger("Database error: %v", err)
+					logger("Database error: %v", err.Error())
 
 					lock()
 					_ = hndl.Close()
