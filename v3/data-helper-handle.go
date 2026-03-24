@@ -59,17 +59,18 @@ func SetHandler(name string, hndl DataHelperHandle) {
 // Reconnect allows reconnection to stabilize the handler.
 //
 // It returns a function to close the timer.
+// Logger function accepts log type as the first argument, message as the second argument
 func Reconnect(
 	hndl DataHelperHandle,
 	interval time.Duration,
 	mu sync.Locker,
-	logf func(string, ...any),
+	logf func(string, ...string),
 ) func() {
 	stopCh := make(chan struct{})
 
-	logger := func(format string, args ...any) {
+	logger := func(logType string, msg ...string) {
 		if logf != nil {
-			logf(format, args...)
+			logf(logType, msg...)
 		}
 	}
 
