@@ -100,12 +100,12 @@ func Reconnect(
 				if hndl.DB() == nil {
 					di := hndl.DI()
 					if di == nil {
-						logger("Database error: nil DataInfo")
+						logger("ERR", "Database error: nil DataInfo")
 						continue
 					}
 
 					if err := hndl.Open(di); err != nil {
-						logger("Database error: %v", err.Error())
+						logger("ERR", "Database error: %v", err.Error())
 						continue
 					}
 
@@ -118,7 +118,7 @@ func Reconnect(
 
 				// Ping to check connection
 				if err := hndl.Ping(); err != nil {
-					logger("Database error: %v", err.Error())
+					logger("ERR", "Database error: %v", err.Error())
 
 					lock()
 					_ = hndl.Close()
@@ -130,9 +130,9 @@ func Reconnect(
 				if justConnected {
 					lock()
 					if connCount == 1 {
-						logger("Database connection successful!")
+						logger("INF", "Database connection successful!")
 					} else {
-						logger("Database re-connection successful!")
+						logger("INF", "Database re-connection successful!")
 					}
 					unlock()
 
@@ -140,7 +140,7 @@ func Reconnect(
 				}
 
 			case <-stopCh:
-				logger("Re-connection ticker stopped!")
+				logger("INF", "Re-connection ticker stopped!")
 				return
 			}
 		}
