@@ -38,8 +38,32 @@ type DataHelperLite interface {
 	QueryRow(sql string, args ...any) Row                            // QueryRow to a database and return one record
 	Rollback() error                                                 // Rollback a transaction
 	Save(name string) error                                          // Save a transaction
-	VendorStatement(key string) string                               // Returns a vendor-specific statement or query when present. Returns an empty string if not present
-	VendorStatements() []string                                      // Lists the vendor-specific statements implemented in a helper
+	// UpsertReturning inserts a row into the table.
+	// If a conflict occurs on the specified unique columns:
+	//
+	//   - If updateColumns is empty, the existing row is returned unchanged
+	//   - If updateColumns is provided, the existing row is updated using EXCLUDED values
+	//
+	// Parameters:
+	//  - insertColumns - columns in the INSERT
+	//  - uniqueColumns - columns defining the conflict target
+	//  - updateColumns -
+	//  1. empty or nil → do not modify existing row on conflict
+	//  2. non-empty → DO UPDATE SET col = EXCLUDED.col
+	//  - returnColumns - columns to return
+	//  - args - values for insertColumns, in order
+	//
+	// The method always returns the resulting row.
+	UpsertReturning(
+		tableName string,
+		insertColumns []string,
+		uniqueColumns []string,
+		updateColumns []string,
+		returnColumns []string,
+		args ...any,
+	) (Row, error)
+	VendorStatement(key string) string // Returns a vendor-specific statement or query when present. Returns an empty string if not present
+	VendorStatements() []string        // Lists the vendor-specific statements implemented in a helper
 }
 
 // ReadType - read types in data retrieval
