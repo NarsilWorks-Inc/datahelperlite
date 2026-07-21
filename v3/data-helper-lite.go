@@ -111,6 +111,8 @@ var (
 	ErrVarMustBeInit         error = errors.New(`variable in next parameter must be initialized`)
 	ErrHandleNotSet          error = errors.New(`handle not set`)
 	ErrHandleDBNotSet        error = errors.New(`handle db not set`)
+	ErrUnderlyingRowNotSet   error = errors.New(`underlying sql.Row is nil`)
+	ErrUnderlyingRowsNotSet  error = errors.New(`underlying sql.Rows is nil`)
 )
 
 // New creates new datahelper lite if the dhl parameter is null.
