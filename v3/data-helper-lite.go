@@ -108,6 +108,7 @@ var (
 	ErrNoRows                error // ErrNoRows for no rows returned
 	ErrArrayTypeNotSupported error = errors.New(`array type not supported`)
 	ErrNoTx                  error = errors.New(`no transaction was initialized`)
+	ErrHandleTxNotNil        error = errors.New(`transaction is still active`)
 	ErrVarMustBeInit         error = errors.New(`variable in next parameter must be initialized`)
 	ErrHandleNotSet          error = errors.New(`handle not set`)
 	ErrHandleDBNotSet        error = errors.New(`handle db not set`)
